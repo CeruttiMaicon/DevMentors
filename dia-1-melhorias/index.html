@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Meu Blog</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: cornflowerblue;
+      }
+      .container {
+        max-width: 800px;
+        width: 100%;
+        margin: 15px auto;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .menu-section {
+        min-width: 300px;
+        border: 1px solid black;
+        margin-right: 15px;
+        padding: 20px;
+        background-color: white;
+      }
+
+      .menu-itens {
+        list-style: none;
+        padding: 0;
+      }
+
+      .main-section {
+      }
+
+      .post {
+        margin-bottom: 10px;
+        background-color: white;
+        border: 1px solid black;
+      }
+
+      .blog-title {
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+      .post-title {
+        font-weight: bold;
+        font-size: 28px;
+        padding: 15px 30px;
+      }
+
+      .post-content {
+        padding: 15px 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="menu-section">
+        <span class="blog-title">Dev Mentors</span>
+        <ul class="menu-itens">
+          <li>Home</li>
+          <li>Categorias</li>
+          <li>Sobre</li>
+        </ul>
+      </div>
+      <div id="posts" class="main-section"></div>
+    </div>
+    <script>
+      var postsContainer = document.querySelector("#posts");
+
+      for (var i = 0; i < 10; i++) {
+        //   Jeito 1
+        // var post = document.createElement("div");
+        // post.classList.add("post");
+        // var postTitle = document.createElement("div");
+        // postTitle.classList.add("post-title");
+        // postTitle.innerHTML = "Post " + i;
+        // var postContent = document.createElement("div");
+        // postContent.classList.add("post-content");
+        // postContent.innerHTML =
+        //   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro inventore reiciendis ducimus, explicabo quae veritatis est totam possimus at deserunt sint placeat ipsam ut voluptate deleniti debitis blanditiis temporibus beatae.";
+        // post.appendChild(postTitle);
+        // post.appendChild(postContent);
+        // postsContainer.appendChild(post);
+        /***************************************************/
+        // Jeito 2
+        // var content = "<div class='post'><div class ='post-title'>";
+        // content += "Post" + i;
+        // content += "</div> <div class='post-content'>";
+        // content +=
+        //   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro inventore reiciendis ducimus, explicabo quae veritatis est totam possimus at deserunt sint placeat ipsam ut voluptate deleniti debitis blanditiis temporibus beatae.";
+        // content += "</div></div>";
+        // postsContainer.innerHTML += content;
+        /***************************************************/
+        // Jeito 3 - melhor jeito
+
+        function makePost(title, content) {
+          var post = "<div class='post'><div class ='post-title'>";
+          post += title;
+          post += "</div> <div class='post-content'>";
+          post += content;
+          post += "</div></div>";
+          postsContainer.innerHTML += post;
+        }
+
+        fetch("http://172.17.1.15:8080/article/recent")
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            for (let i = 0; i < data.length; i++) {
+              makePost(data[i].title, data[i].content);
+            }
+          })
+          .catch(function(error) {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
